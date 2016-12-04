@@ -1,4 +1,17 @@
+var jwt = require('jwt-simple');
+var config = require('../config');
+
 var User = require('../models/user');
+
+function tokenUser(user){
+  var currentTimeStamp = new Date().getTime();
+  // take user's id and encode it
+  // sub is subject; subject of this token is the current user
+  // iat is issued at time
+  return jwt.encode({
+    sub: user.id, iat: currentTimeStamp
+  }, config.jwt_secret);
+}
 
 exports.signup = function(req, res, next) {
   // res.send({ success: 'true' });
@@ -37,7 +50,7 @@ exports.signup = function(req, res, next) {
           return next(err);
         }
         // respond to request indicating user is successfully created
-        res.json({success: true});
+        res.json({token: tokenUser(user)});
     });
 
   });
