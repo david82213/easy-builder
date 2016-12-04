@@ -8,6 +8,10 @@ exports.signup = function(req, res, next) {
   var email = req.body.email;
   var password = req.body.password;
 
+  if (!email){
+    return res.status(422).send({ errror: 'Must provide email'});
+  }
+
   // check if email is existed
   User.findOne({ email: email }, function(err, existUser){
     if (err) {
