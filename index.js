@@ -7,6 +7,11 @@ var morgan = require('morgan');
 var app = express();
 var router = require('./router');
 
+var mongoose = require('mongoose');
+//////////////////////////////////
+// DB setup
+mongoose.connect('mongodb://localhost:auth/auth');
+
 //////////////////////////////////
 // App setup
 
