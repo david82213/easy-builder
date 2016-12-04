@@ -52,8 +52,10 @@ exports.signup = function(req, res, next) {
         // respond to request indicating user is successfully created
         res.json({token: tokenUser(user)});
     });
-
   });
+}
 
-
+exports.signin = function(req, res, next){
+  // give user token since email & password are verified
+  res.send({token: tokenUser(req.user)});
 }
