@@ -12,9 +12,9 @@ module.exports = function(app) {
   // });
 
   // pass requireAuth first
-  app.get('/', requireAuth, function(req, res){
-    res.send({ hi: 'there' });
-  });
+  // app.get('/', requireAuth, function(req, res){
+  //   res.send({ hi: 'there' });
+  // });
 
   app.post('/signup', Authentication.signup);
 
