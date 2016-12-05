@@ -7,7 +7,7 @@ export default class App extends Component {
       <div>
         <Header />
         <div data-editable data-name="title">
-          <p>React simple starter</p>
+          {this.props.children}
         </div>
       </div>
     );
