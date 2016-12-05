@@ -26,12 +26,12 @@ class Signin extends Component {
 
         <fieldset className="form-group">
           <label>Email:</label>
-          <Field name="email" component="input" className="form-control" />
+          <Field type="email" name="email" component="input" className="form-control" />
         </fieldset>
 
         <fieldset className="form-group">
           <label>Password:</label>
-          <Field name="password" component="input" className="form-control" />
+          <Field type="password" name="password" component="input" className="form-control" />
         </fieldset>
         <button action="submit" className="btn btn-primary">Sign In</button>
       </form>
