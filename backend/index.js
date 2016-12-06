@@ -7,6 +7,8 @@ var morgan = require('morgan');
 var app = express();
 var router = require('./router');
 
+var cors = require('cors');
+
 var mongoose = require('mongoose');
 //////////////////////////////////
 // DB setup
@@ -16,6 +18,7 @@ mongoose.connect('mongodb://localhost:auth/auth');
 // App setup
 
 // middleware express
+app.use(cors());
 // morgan is console input logging framework
 app.use(morgan('combined'));
 // bodyParser is parse incoming requests into json no matter the type
