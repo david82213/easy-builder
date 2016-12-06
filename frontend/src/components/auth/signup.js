@@ -3,35 +3,49 @@ import { Field, reduxForm } from 'redux-form';
 import * as actions from '../../actions';
 
 class Signup extends Component {
+  handleFormSubmit(formProps){
+    this.props.signUpUser(formProps);
+  }
+
+  renderAlert(){
+    if (this.props.errorMessage){
+      return (
+        <div className="alert alert-danger fl w-100">
+          {this.props.errorMessage}
+        </div>
+      )
+    }
+  }
 
   render (){
     const {
       handleSubmit,
       fields: {
-        first_name,
-        last_name,
+        firstName,
+        lastName,
         email,
         password,
         passwordConfirm
       }
     } = this.props
+
     return (
-      <form>
+      <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
         <fieldset className="form-group fl w-50">
           <label>First Name: </label>
-          <input className="form-control" {...first_name} />
-            {first_name.touched &&
-              first_name.error &&
-              <div className="gold">{first_name.error}</div>
+          <input className="form-control" {...firstName} />
+            {firstName.touched &&
+              firstName.error &&
+              <div className="gold">{firstName.error}</div>
             }
         </fieldset>
 
         <fieldset className="form-group fr w-50">
           <label>Last Name: </label>
-          <input className="form-control" {...last_name} />
-            {last_name.touched &&
-              last_name.error &&
-              <div className="gold">{last_name.error}</div>
+          <input className="form-control" {...lastName} />
+            {lastName.touched &&
+              lastName.error &&
+              <div className="gold">{lastName.error}</div>
             }
         </fieldset>
 
@@ -64,6 +78,7 @@ class Signup extends Component {
             }
         </fieldset>
 
+        {this.renderAlert()}
         <button action="submit" className="btn btn-primary fl w-100">Sign Up</button>
       </form>
     );
@@ -74,12 +89,12 @@ function validate(formProps){
   const errors = {};
   // console.log(formProps);
 
-  if (!formProps.first_name){
-    errors.first_name = "Please enter first name"
+  if (!formProps.firstName){
+    errors.firstName = "Please enter first name"
   }
 
-  if (!formProps.last_name){
-    errors.last_name = "Please enter last name"
+  if (!formProps.lastName){
+    errors.lastName = "Please enter last name"
   }
 
   if (!formProps.email){
@@ -101,8 +116,14 @@ function validate(formProps){
   return errors;
 }
 
+function mapStateToProps(state){
+  return {
+    errorMessage: state.auth.error
+  };
+}
+
 export default reduxForm({
   form: 'signup',
-  fields: ['first_name', 'last_name', 'email', 'password', 'passwordConfirm'],
+  fields: ['firstName', 'lastName', 'email', 'password', 'passwordConfirm'],
   validate: validate
-})(Signup);
+}, mapStateToProps, actions)(Signup);
