@@ -5,7 +5,7 @@ import * as actions from '../../actions';
 class Signin extends Component {
   handleFormSubmit({email, password}) {
     // console.log(email, password);
-    // this.props.signinUser({ email, password });
+    this.props.signinUser({email, password});
   }
 
   render (){
@@ -16,7 +16,7 @@ class Signin extends Component {
 
     return (
       <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
-        {/* <fieldset className="form-group">
+        <fieldset className="form-group">
           <label>Email:</label>
           <input type="text" {...email} className="form-control" />
         </fieldset>
@@ -24,9 +24,9 @@ class Signin extends Component {
         <fieldset className="form-group">
           <label>Password:</label>
           <input type="password" {...password} className="form-control" />
-        </fieldset> */}
+        </fieldset>
 
-        <fieldset className="form-group">
+        {/* <fieldset className="form-group">
           <label>Email:</label>
           <Field type="email" name="email" component="input" className="form-control" />
         </fieldset>
@@ -34,7 +34,7 @@ class Signin extends Component {
         <fieldset className="form-group">
           <label>Password:</label>
           <Field type="password" name="password" component="input" className="form-control" />
-        </fieldset>
+        </fieldset> */}
         <button action="submit" className="btn btn-primary">Sign In</button>
       </form>
     )
