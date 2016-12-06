@@ -2,7 +2,7 @@ import axios from 'axios';
 const API_URL = 'http://localhost:3000';
 
 import { browserHistory } from 'react-router';
-import { AUTH_USER, AUTH_ERROR } from './types';
+import { AUTH_USER, AUTH_ERROR, UNAUTH_USER } from './types';
 
 export function signinUser({ email, password }) {
   // use redux-thunk
@@ -27,6 +27,13 @@ export function signinUser({ email, password }) {
         dispatch(authError('Wrong Credentials'));
       });
   }
+}
+
+export function signOutUser(){
+  localStorage.removeItem('token');
+  return {
+    type: UNAUTH_USER
+  };
 }
 
 export function authError(error){
