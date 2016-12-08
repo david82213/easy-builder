@@ -3,6 +3,7 @@ var express = require('express');
 var http = require('http');
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
+var path = require('path')
 
 var app = express();
 var router = require('./router');
@@ -20,6 +21,13 @@ mongoose.connect('mongodb://localhost:auth/auth');
 // middleware express
 app.use(cors());
 // morgan is console input logging framework
+app.use(express.static(__dirname + '/public'))
+
+// console.log("path", path.join(__dirname, '/templates'))
+
+app.set('views', path.join(__dirname, '/templates'))
+app.set('view engine', 'ejs')
+// app.use(express.static( __dirname + '/templates' ));
 app.use(morgan('combined'));
 // bodyParser is parse incoming requests into json no matter the type
 app.use(bodyParser.json({ type: '*/*' }));

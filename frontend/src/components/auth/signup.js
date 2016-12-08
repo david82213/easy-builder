@@ -33,7 +33,7 @@ class Signup extends Component {
       <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
         <fieldset className="form-group fl w-50">
           <label>First Name: </label>
-          <input className="form-control" {...firstName} />
+          <input className="form-control ttc" {...firstName} />
             {firstName.touched &&
               firstName.error &&
               <div className="gold">{firstName.error}</div>
@@ -42,7 +42,7 @@ class Signup extends Component {
 
         <fieldset className="form-group fr w-50">
           <label>Last Name: </label>
-          <input className="form-control" {...lastName} />
+          <input className="form-control ttc" {...lastName} />
             {lastName.touched &&
               lastName.error &&
               <div className="gold">{lastName.error}</div>

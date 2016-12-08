@@ -6,6 +6,19 @@ var passportConfig = require('./services/passport');
 var requireAuth = passport.authenticate('jwt', { session: false });
 var requireSignin = passport.authenticate('local', { session: false });
 
+// a convenient variable to refer to the HTML directory
+var templates_dir = './templates';
+// var path = require('path');
+
+var fs = require('fs')
+var path = require('path');
+
+function getDirectories(srcpath) {
+  return fs.readdirSync(srcpath).filter(function(file) {
+    return fs.statSync(path.join(srcpath, file)).isDirectory();
+  });
+}
+
 module.exports = function(app) {
   // app.get('/', function(req, res, next) {
   //   res.send(['a', 'b', 'c']);
@@ -19,4 +32,37 @@ module.exports = function(app) {
   app.post('/signup', Authentication.signup);
 
   app.post('/signin', requireSignin, Authentication.signin);
+
+  // routes to serve the static HTML files
+  app.get('/blog', function(req, res) {
+      // res.render(html_dir);
+      // res.send(html_dir);
+
+      // const pathToTemplate = path.join(__dirname, 'templates', 'blog')
+      // res.sendFile(
+      //   'index.html',
+      //   { root: pathToTemplate }
+      // );
+
+      res.sendFile(path.join( __dirname, 'templates/blog', 'index.html' ));
+  });
+
+  // app.get('/public/templates', function(req, res, next) {
+  //   res.send(getDirectories(templates_dir));
+  // });
+
+  // app.get('/templates/blog', function(req, res, next){
+  //   // res.sendFile(path.join( __dirname, 'templates/blog', 'index.html' ));
+  //
+  // });
+
+  app.get('/templates/blog', function(req, res, next){
+    res.render('blog/index', {layout: true}, function(err, html){
+      var response = {
+        template_type: 'Blog',
+        template_body_html: html
+      };
+      res.send(response);
+    });
+  })
 }

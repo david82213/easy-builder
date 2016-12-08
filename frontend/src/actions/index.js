@@ -54,3 +54,12 @@ export function authError(error){
     payload: error
   };
 }
+
+export function templateFind(){
+  return function(dispatch){
+    axios.get(`${API_URL}/templates`)
+      .then(response => {
+        console.log(response.data);
+      });
+  }
+}
