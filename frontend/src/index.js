@@ -18,9 +18,19 @@ import Theme from './components/theme';
 import Welcome from './components/welcome';
 
 const createStoreWithMiddleware = applyMiddleware(reduxThunk)(createStore);
+// store contains redux state
+const store = createStoreWithMiddleware(reducers);
+const token = localStorage.getItem('token');
+import { AUTH_USER } from './actions/types';
+
+// if token exists, update app state to signed in
+if (token){
+  store.dispatch({ type: AUTH_USER });
+}
 
 ReactDOM.render(
-  <Provider store={createStoreWithMiddleware(reducers)}>
+  // <Provider store={createStoreWithMiddleware(reducers)}>
+  <Provider store={store}>
     <Router history={browserHistory}>
       <Route path="/" component={App}>
         <IndexRoute component={Welcome}/>
