@@ -34,17 +34,17 @@ module.exports = function(app) {
   app.post('/signin', requireSignin, Authentication.signin);
 
   // routes to serve the static HTML files
-  app.get('/blog', function(req, res) {
+  app.get('/templates/blog', function(req, res) {
       // res.render(html_dir);
-      // res.send(html_dir);
+      // res.send('ok');
 
-      // const pathToTemplate = path.join(__dirname, 'templates', 'blog')
+      // const pathToTemplate = path.join(__dirname, 'templates', 'blog');
       // res.sendFile(
       //   'index.html',
       //   { root: pathToTemplate }
       // );
 
-      res.sendFile(path.join( __dirname, 'templates/blog', 'index.html' ));
+    res.sendFile(path.join( __dirname, 'templates/blog', 'index.html' ));
   });
 
   // app.get('/public/templates', function(req, res, next) {
@@ -52,17 +52,17 @@ module.exports = function(app) {
   // });
 
   // app.get('/templates/blog', function(req, res, next){
-  //   // res.sendFile(path.join( __dirname, 'templates/blog', 'index.html' ));
-  //
+  //   res.sendFile(path.join( __dirname, 'templates/blog', 'index.html' ));
   // });
 
-  app.get('/templates/blog', function(req, res, next){
-    res.render('blog/index', {layout: true}, function(err, html){
-      var response = {
-        template_type: 'Blog',
-        template_body_html: html
-      };
-      res.send(response);
-    });
-  })
+  // json with href hardcode
+  // app.get('/templates/blog', function(req, res, next){
+  //   res.render('blog/index', {layout: true}, function(err, html){
+  //     var response = {
+  //       template_type: 'Blog',
+  //       template_body_html: html
+  //     };
+  //     res.send(response);
+  //   });
+  // })
 }

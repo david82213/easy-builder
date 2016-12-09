@@ -46,9 +46,10 @@ class Theme extends Component {
     return (
       <div>
         {/* <Iframe url="http://localhost:3000/templates/blog" /> */}
+        <Iframe url="http://localhost:3000/blog" />
         {/* {this.getTemplates()} */}
-        {this.getOneTemplate()}
-        <div dangerouslySetInnerHTML={{__html: this.state.template_html}}></div>
+        {/* {this.getOneTemplate()} */}
+        {/* <div id="template-id" contentEditable='true' dangerouslySetInnerHTML={{__html: this.state.template_html}}></div> */}
       </div>
     );
   }

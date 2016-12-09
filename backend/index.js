@@ -21,12 +21,17 @@ mongoose.connect('mongodb://localhost:auth/auth');
 // middleware express
 app.use(cors());
 // morgan is console input logging framework
-app.use(express.static(__dirname + '/public'))
+
+// json method
+// app.use(express.static(__dirname + '/public'))
+app.use(express.static(__dirname + '/templates'))
 
 // console.log("path", path.join(__dirname, '/templates'))
 
-app.set('views', path.join(__dirname, '/templates'))
-app.set('view engine', 'ejs')
+// json method
+// app.set('views', path.join(__dirname, '/templates'))
+// app.set('view engine', 'ejs')
+
 // app.use(express.static( __dirname + '/templates' ));
 app.use(morgan('combined'));
 // bodyParser is parse incoming requests into json no matter the type

@@ -1,14 +1,14 @@
 window.addEventListener('load', function() {
-  var editor;
+    var editor;
 
-  ContentTools.StylePalette.add([
-    new ContentTools.Style('Author', 'author', ['p'])
-  ]);
+    ContentTools.StylePalette.add([
+      new ContentTools.Style('Author', 'author', ['p'])
+    ]);
 
-  editor = ContentTools.EditorApp.get();
-  editor.init('*[data-editable]', 'data-name');
+    editor = ContentTools.EditorApp.get();
+    editor.init('*[data-editable]', 'data-name');
 
-  editor.addEventListener('saved', function (ev) {
+    editor.addEventListener('saved', function (ev) {
     var name, payload, regions, xhr;
 
     // Check that something changed
