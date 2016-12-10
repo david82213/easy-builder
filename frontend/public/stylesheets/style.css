@@ -1,1 +1,14 @@
+.index-image {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: url(../images/bg.jpg);
+  background-size: cover;
+}
 
+.index-contents{
+  position: absolute;
+  top: 100%;
+  width: 100%;
+  height: 200px;
+}

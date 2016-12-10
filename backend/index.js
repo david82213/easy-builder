@@ -14,6 +14,7 @@ var mongoose = require('mongoose');
 //////////////////////////////////
 // DB setup
 mongoose.connect('mongodb://localhost:auth/auth');
+// mongoose.connect('mongodb://localhost:auth/template');
 
 //////////////////////////////////
 // App setup

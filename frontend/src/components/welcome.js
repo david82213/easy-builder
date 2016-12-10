@@ -1,4 +1,9 @@
 import React from 'react';
 
 // style this later
-export default () => <div>Welcome to Easy Site Builder</div>
+export default () =>
+  <div className="index-image">
+    <div className="index-contents">
+      Welcome to Easy Site Builder
+    </div>
+  </div>

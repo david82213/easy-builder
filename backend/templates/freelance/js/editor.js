@@ -36,8 +36,8 @@ window.addEventListener('load', function() {
 
       payload = new FormData();
       payload.append(
-          'users',
-          document.querySelector('meta[name=users]').getAttribute('blog')
+          'blog',
+          document.querySelector('meta[name=blog]').getAttribute('content')
           );
       payload.append('regions', JSON.stringify(regions));
 

@@ -42,5 +42,5 @@ ReactDOM.render(
     </Router>
     {/* <App /> */}
   </Provider>
-  , document.querySelector('.container')
+  , document.querySelector('.all-contents')
 );
