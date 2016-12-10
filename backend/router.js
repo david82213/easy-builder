@@ -13,6 +13,8 @@ var templates_dir = './templates';
 var fs = require('fs')
 var path = require('path');
 
+var User = require('./models/user');
+
 function getDirectories(srcpath) {
   return fs.readdirSync(srcpath).filter(function(file) {
     return fs.statSync(path.join(srcpath, file)).isDirectory();
@@ -43,6 +45,13 @@ module.exports = function(app) {
       //   'index.html',
       //   { root: pathToTemplate }
       // );
+      console.log(User);
+      const u = new User({firstName: 'dan', lastName: 'dan', email: 'dan2@dan.com', password: '123', template: { blog: 'blogTemplateContents' }});
+
+      u.save(function (user, error) {
+        debugger
+
+      })
 
     res.sendFile(path.join( __dirname, 'templates/blog', 'index.html' ));
   });

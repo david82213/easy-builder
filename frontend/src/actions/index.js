@@ -2,7 +2,7 @@ import axios from 'axios';
 const API_URL = 'http://localhost:3000';
 
 import { browserHistory } from 'react-router';
-import { AUTH_USER, AUTH_ERROR, UNAUTH_USER } from './types';
+import { AUTH_USER, AUTH_ERROR, UNAUTH_USER, FETCH_MESSAGE } from './types';
 
 export function signinUser({ email, password }) {
   // use redux-thunk
@@ -60,6 +60,23 @@ export function templateFind(){
     axios.get(`${API_URL}/templates`)
       .then(response => {
         console.log(response.data);
+      });
+  }
+}
+
+// include token as header to make sure is authenticated
+// can use later for template
+export function fetchMessage(){
+  return function(dispatch){
+    axios.get(API_URL, {
+      headers: { authorization: localStorage.getItem('token') }
+    })
+      .then(response => {
+        // console.log(response);
+        dispatch({
+          type: FETCH_MESSAGE,
+          payload: response.data.message
+        });
       });
   }
 }

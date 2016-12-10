@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import * as actions from '../actions';
+import { connect } from 'react-redux';
 
 const API_URL = 'http://localhost:3000';
 var template;
@@ -8,6 +9,10 @@ var template;
 var Iframe = require("react-iframe");
 
 class Theme extends Component {
+  componentWillMount(){
+    this.props.fetchMessage();
+  }
+
   constructor(props) {
     super(props);
     // this.getTemplates = this.getTemplates.bind(this);
@@ -55,4 +60,9 @@ class Theme extends Component {
   }
 }
 
-export default Theme;
+
+function mapStateToProps(state){
+  return { message: state.auth.message }
+}
+// export default Theme;
+export default connect(mapStateToProps, actions)(Theme);
