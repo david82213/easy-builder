@@ -13,15 +13,25 @@
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.15.2",
     "cors": "^2.8.1",
+    "crypto": "0.0.3",
     "express": "^4.14.0",
+    "express-flash": "0.0.2",
+    "express-session": "^1.14.2",
+    "express-validator": "^3.0.0",
     "jwt-simple": "^0.5.1",
     "mongodb": "^2.2.12",
     "mongoose": "^4.7.1",
     "morgan": "^1.7.0",
+    "node-twitter-api": "^1.8.0",
     "nodemon": "^1.11.0",
     "passport": "^0.3.2",
+    "passport-google-oauth": "^1.0.0",
+    "passport-google-oauth2": "^0.1.6",
     "passport-jwt": "^2.2.1",
-    "passport-local": "^1.0.0"
+    "passport-linkedin-oauth2": "^1.4.1",
+    "passport-local": "^1.0.0",
+    "passport-twitter": "^1.0.4",
+    "validator": "^6.2.0"
   },
   "devDependencies": {
     "ejs": "^2.5.5"

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
+var FontAwesome = require('react-fontawesome');
 
 class Header extends Component{
   renderLinks(){
@@ -20,6 +21,11 @@ class Header extends Component{
         </li>,
         <li className="nav-item" key={2}>
           <Link className="nav-link" to="/signup">Sign Up</Link>
+        </li>,
+        <li className="nav-item" key={3}>
+          <Link className="nav-link" to="http://www.google.ca">
+            Google
+          </Link>
         </li>
       ];
     }
@@ -28,7 +34,7 @@ class Header extends Component{
   render(){
     return (
       <nav className="navbar navbar-light">
-        <Link to="/" className="navbar-brand">Easy Site Builder</Link>
+        <Link to="/" className="navbar-brand logo">Easy Site Builder</Link>
         <ul className="nav navbar-nav">
           {this.renderLinks()}
         </ul>

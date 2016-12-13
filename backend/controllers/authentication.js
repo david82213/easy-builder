@@ -16,6 +16,17 @@ function tokenUser(user){
 exports.signup = function(req, res, next) {
   // res.send({ success: 'true' });
   // console.log(req.body);
+
+  // req.assert('email', 'Email is not valid').isEmail();
+  // req.assert('password', 'Password must be at least 2 characters long').len(2);
+  // req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
+  // const errors = req.validationErrors();
+  //
+  // if (errors){
+  //   req.flash('errors', errors);
+  //   return res.redirect('/signup');
+  // }
+
   var firstName = req.body.firstName;
   var lastName = req.body.lastName;
   var email = req.body.email;
@@ -58,4 +69,8 @@ exports.signup = function(req, res, next) {
 exports.signin = function(req, res, next){
   // give user token since email & password are verified
   res.send({token: tokenUser(req.user)});
+}
+
+exports.twitterSignin = function(req, res, next){
+  res.send({token: tokenUser()})
 }
