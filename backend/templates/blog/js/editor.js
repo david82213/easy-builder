@@ -88,7 +88,7 @@ window.addEventListener('load', function() {
         dataType: 'json',
         data: ev.detail().regions,
         success: function (e) { new ContentTools.FlashUI('ok') },
-        error: function (e) { debugger; new ContentTools.FlashUI('no') },
+        error: function (e) { new ContentTools.FlashUI('no') },
         complete: function (e) { editor.busy(false) }
       })
 
@@ -99,3 +99,119 @@ window.addEventListener('load', function() {
     }
   );
 });
+
+/////////////////////////////////////////////////////////////////////////////////////
+// image uploading
+function imageUploader(dialog) {
+  var image, xhr, xhrComplete, xhrProgress;
+
+
+  // Set up the event handlers
+  dialog.addEventListener('imageuploader.cancelupload', function () {
+    // Cancel the current upload
+
+    // Stop the upload
+    if (xhr) {
+        xhr.upload.removeEventListener('progress', xhrProgress);
+        xhr.removeEventListener('readystatechange', xhrComplete);
+        xhr.abort();
+    }
+
+    // Set the dialog to empty
+    dialog.state('empty');
+  });
+
+  dialog.addEventListener('imageuploader.clear', function () {
+    // Clear the current image
+    dialog.clear();
+    image = null;
+  });
+
+  dialog.addEventListener('imageuploader.fileready', function (ev) {
+
+      // Upload a file to the server
+      var formData;
+      var file = ev.detail().file;
+
+      // Define functions to handle upload progress and completion
+      xhrProgress = function (ev) {
+          // Set the progress for the upload
+          dialog.progress((ev.loaded / ev.total) * 100);
+      }
+
+      xhrComplete = function (ev) {
+        var response;
+
+        // Check the request is complete
+        if (ev.target.readyState != 4) {
+            return;
+        }
+
+        // Clear the request
+        xhr = null
+        xhrProgress = null
+        xhrComplete = null
+
+        // Handle the result of the upload
+        if (parseInt(ev.target.status) == 200) {
+            // Unpack the response (from JSON)
+            response = JSON.parse(ev.target.responseText);
+            // console.log(response);
+
+            // Store the image details
+            var img = new Image();
+            var resolution = [];
+            img.addEventListener("load", function(){
+                resolution.push(this.naturalWidth);
+                resolution.push(this.naturalHeight);
+            });
+            img.src = "http://127.0.0.1:3000/" + response.filename.replace(/ /g, '%20');
+
+            image = {
+                // size: response.size,
+                size: resolution,
+                url: "http://127.0.0.1:3000/" + response.filename.replace(/ /g, '%20')
+                };
+            console.log(image);
+            // Populate the dialog
+            dialog.populate(image.url, image.size);
+
+        } else {
+            // The request failed, notify the user
+            new ContentTools.FlashUI('no');
+        }
+    }
+
+    // Set the dialog state to uploading and reset the progress bar to 0
+    dialog.state('uploading');
+    dialog.progress(0);
+
+    // Build the form data to post to the server
+    formData = new FormData();
+    formData.append('image', file);
+
+
+    // debugger
+
+    // $.ajax({
+    //   url: '/blog-image',
+    //   method: 'POST',
+    //   cache: false,
+    //   contentType: false,
+    //   processData: false,
+    //   data: formData,
+    //   success: function (e) { new ContentTools.FlashUI('ok') },
+    //   error: function (e) { new ContentTools.FlashUI('no') }
+    // })
+
+    // Make the request
+    xhr = new XMLHttpRequest();
+    xhr.upload.addEventListener('progress', xhrProgress);
+    xhr.addEventListener('readystatechange', xhrComplete);
+    xhr.open('POST', '/blog-image', true);
+    xhr.send(formData);
+  });
+
+}
+
+ContentTools.IMAGE_UPLOADER = imageUploader;

@@ -20,6 +20,24 @@ var Twitter = require("node-twitter-api");
 var secret = require('./config');
 var jwt = require('jwt-simple');
 
+var multer = require('multer');
+// var upload = multer({ dest: './uploads/'});
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './uploads/')
+  },
+  filename: function (req, file, cb) {
+    // cb(null, file.originalname + '-' + Date.now() + path.extname(file.originalname));
+    var name = file.originalname.split('.');
+    cb(null, name[0] + '-' + Date.now() + path.extname(file.originalname));
+    // crypto.pseudoRandomBytes(16, function (err, raw) {
+    //   cb(null, raw.toString('hex') + Date.now() + '.' + mime.extension(file.mimetype));
+    // });
+  }
+})
+
+var upload = multer({ storage: storage })
+
 function getDirectories(srcpath) {
   return fs.readdirSync(srcpath).filter(function(file) {
     return fs.statSync(path.join(srcpath, file)).isDirectory();
@@ -194,6 +212,28 @@ module.exports = function(app) {
 
   });
 
+  // app.post('/blog-image', upload.single('avatar'), function (req, res, next) {
+  //   // req.file is the `avatar` file
+  //   // req.body will hold the text fields, if there were any
+  //   console.log(req.body);
+  //   console.log(req.file);
+  //   res.status(204).end();
+  // });
+
+  app.post('/blog-image', upload.single('image'), function (req, res, next) {
+    // debugger
+    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>')
+    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>')
+    console.log(req.file);
+    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>')
+    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>')
+
+    // res.status(204).end();
+    // console.log(req.file);
+    res.send(req.file);
+    // res.send(req.path);
+  });
+
   app.post('/blog-test', function(req, res, next){
     // debugger
     // console.log(Object.keys(req.body));
@@ -211,7 +251,7 @@ module.exports = function(app) {
         user.template.blog = Object.assign({}, user.template.blog, req.body);
 
         user.save(function(err, user) {
-          console.info('🆘 👉',err)
+          // console.info('🆘 👉',err)
           if (err) {
             res.json({error: 'save fail'});
           } else {
