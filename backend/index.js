@@ -59,7 +59,7 @@ app.use(session({ secret: 'SECRET' }));
 // json method
 // app.use(express.static(__dirname + '/public'))
 app.use(express.static(__dirname + '/templates'));
-app.use(express.static(__dirname + '/uploads'));
+app.use('/uploads', express.static(__dirname + '/uploads'));
 
 // console.log("path", path.join(__dirname, '/templates'))
 

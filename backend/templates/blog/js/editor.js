@@ -165,12 +165,12 @@ function imageUploader(dialog) {
                 resolution.push(this.naturalWidth);
                 resolution.push(this.naturalHeight);
             });
-            img.src = "http://127.0.0.1:3000/" + response.filename.replace(/ /g, '%20');
+            img.src = "http://127.0.0.1:3000/uploads/" + response.filename.replace(/ /g, '%20');
 
             image = {
                 // size: response.size,
                 size: resolution,
-                url: "http://127.0.0.1:3000/" + response.filename.replace(/ /g, '%20')
+                url: "http://127.0.0.1:3000/uploads/" + response.filename.replace(/ /g, '%20')
                 };
             console.log(image);
             // Populate the dialog
@@ -210,6 +210,15 @@ function imageUploader(dialog) {
     xhr.addEventListener('readystatechange', xhrComplete);
     xhr.open('POST', '/blog-image', true);
     xhr.send(formData);
+  });
+
+  dialog.addEventListener('imageuploader.save', function () {
+
+    dialog.save(
+      image.url,
+      image.size
+    );
+
   });
 
 }
