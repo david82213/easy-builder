@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-var FontAwesome = require('react-fontawesome');
+
+var style={
+  color: 'white'
+};
 
 class Header extends Component{
   renderLinks(){
@@ -9,7 +12,7 @@ class Header extends Component{
     if (this.props.authenticated) {
       return (
         <li className="nav-item">
-          <Link className="nav-link" to="/signout">Sign Out</Link>
+          <Link className="nav-link" to="/signout" style={style}>Sign Out</Link>
         </li>
       );
     }
@@ -34,7 +37,7 @@ class Header extends Component{
   render(){
     return (
       <nav className="navbar navbar-light">
-        <Link to="/" className="navbar-brand logo">Easy Site Builder</Link>
+        <Link to="/" className="navbar-brand logo" style={style}>Easy Site Builder</Link>
         <ul className="nav navbar-nav">
           {this.renderLinks()}
         </ul>

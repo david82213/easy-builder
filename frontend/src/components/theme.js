@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import * as actions from '../actions';
 import { connect } from 'react-redux';
+import Header from './header';
 
 const API_URL = 'http://localhost:3000';
 var template;
@@ -78,6 +79,7 @@ class Theme extends Component {
   render() {
     return (
       <div>
+        <Header />
         {/* <Iframe url="http://localhost:3000/templates/blog" /> */}
         <Iframe url="http://localhost:3000/blog" />
         {this.makeAnotherRequest()}
