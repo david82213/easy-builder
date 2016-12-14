@@ -88,7 +88,8 @@ window.addEventListener('load', function() {
         dataType: 'json',
         data: ev.detail().regions,
         success: function (e) { new ContentTools.FlashUI('ok') },
-        error: function (e) { new ContentTools.FlashUI('no') }
+        error: function (e) { debugger; new ContentTools.FlashUI('no') },
+        complete: function (e) { editor.busy(false) }
       })
 
       // xhr = new XMLHttpRequest();

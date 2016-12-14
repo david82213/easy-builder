@@ -71,6 +71,6 @@ exports.signin = function(req, res, next){
   res.send({token: tokenUser(req.user)});
 }
 
-exports.twitterSignin = function(req, res, next){
-  res.send({token: tokenUser()})
-}
+// exports.twitterSignin = function(req, res, next){
+//   res.send({token: tokenUser(user)});
+// }

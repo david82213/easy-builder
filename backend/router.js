@@ -1,6 +1,7 @@
 var Authentication = require('./controllers/authentication');
 var passport = require('passport');
 var passportConfig = require('./services/passport');
+var _ = require('lodash');
 
 // since using token, no need for session
 var requireAuth = passport.authenticate('jwt', { session: false });
@@ -23,6 +24,65 @@ function getDirectories(srcpath) {
   return fs.readdirSync(srcpath).filter(function(file) {
     return fs.statSync(path.join(srcpath, file)).isDirectory();
   });
+}
+
+
+var blogDefaults = {
+  contents1: `<ul class=\"nav navbar-nav navbar-right\">
+                <li>
+                    <a href=\"index.html\">Home</a>
+                </li>
+                <li>
+                    <a href=\"about.html\">About</a>
+                </li>
+                <li>
+                    <a href=\"post.html\">Sample Post</a>
+                </li>
+                <li>
+                    <a href=\"contact.html\">Contact</a>
+                </li>
+              </ul>`,
+  contents2: `<h1>Clean Blog</h1>
+              <hr class=\"small\">
+              <p class=\"subheading\">A Clean Blog Theme by Start Bootstrap</p>`,
+  contents3: `<h2 class=\"post-title\">
+                <a href=\"post.html\">
+                    Man must explore, and this is exploration at its greatest
+                </a>
+              </h2>
+              <h3 class=\"post-subtitle\">
+                  Problems look mighty small from 150 miles up
+              </h3>
+              <p class=\"post-meta\">Posted by <a href=\"#\">Start Bootstrap</a> on September 24, 2014</p>`,
+  contents4: `<h2 class=\"post-title\">
+                <a href=\"post.html\">
+                  I believe every human has a finite number of heartbeats. I don\'t intend to waste any of mine.
+                </a>
+              </h2>
+              <p class=\"post-meta\">Posted by <a href=\"#\">Start Bootstrap</a> on September 18, 2014</p>`,
+  contents5: `<h2 class=\"post-title\">
+                <a href=\"post.html\">
+                  Science has not yet mastered prophecy
+                </a>
+              </h2>
+              <h3 class=\"post-subtitle\">
+                  We predict too much for the next year and yet far too little for the next ten.
+              </h3>
+              <p class=\"post-meta\">Posted by <a href=\"#\">Start Bootstrap</a> on August 24, 2014</p>`,
+  contents6: `<h2 class="post-title">
+                <a href="post.html">
+                  Failure is not an option
+                </a>
+              </h2>
+              <h3 class="post-subtitle">
+                Many say exploration is part of our destiny, but it’s actually our duty to future generations.
+              </h3>
+              <p class="post-meta">Posted by <a href="#">Start Bootstrap</a> on July 8, 2014</p>`,
+  contents7: `<ul class="pager">
+                <li class="next">
+                    <a href="#">Older Posts &rarr;</a>
+                </li>
+              </ul>`
 }
 
 module.exports = function(app) {
@@ -87,6 +147,29 @@ module.exports = function(app) {
     failureRedirect: 'http://localhost:3001',
   }));
 
+  app.get('/blog', function(req, res, next){
+    var fixed_user_id = "585076d7daf33c20b287cf73";
+    var user = User.findById(fixed_user_id, function(err, existUser){
+       if (existUser){
+         if (existUser.template.blog !== void 0) {
+           var keys = Object.keys(existUser.template.blog);
+           var arr_contents = {};
+           for (var i = 0; i < keys.length; i++) {
+             arr_contents[keys[i]] = existUser.template.blog[keys[i]];
+           }
+        //  var contents5 = existUser.template.blog['contents5'];
+          console.log(arr_contents);
+        }
+       }
+
+
+       indexHTML = path.join(__dirname, 'templates/blog', 'index.ejs');
+      //  res.render(indexHTML, _.merge({}, blogDefaults, {contents5: contents5}));
+       res.render(indexHTML, _.merge({}, blogDefaults, arr_contents));
+     });
+
+  });
+
   app.post('/blog', function(req, res, next){
     // find the token
     var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['authorization'];
@@ -113,21 +196,66 @@ module.exports = function(app) {
 
   app.post('/blog-test', function(req, res, next){
     // debugger
-    console.log(req.body);
+    // console.log(Object.keys(req.body));
+    var keys = Object.keys(req.body);
 
-    var fixed_user_id = "584df9b62fae324a6eeab438";
-    var user = User.findById(fixed_user_id, function(err, existUser){
-      if (existUser){
-        console.log("user found");
-        existUser.template = {blog: req.body};
-        existUser.save(function(err){
-          if(err){
-            return next(err);
+    var fixed_user_id = "585076d7daf33c20b287cf73";
+    // var fixed_user_id = "5850801ef08d802aefeb5472";
+
+    User.findOne(
+      {_id: fixed_user_id},
+      function (err, user) {
+        // debugger
+        // console.log(user.template.blog['contents5']);
+        // user.template.update({blog: req.body});
+        user.template.blog = Object.assign({}, user.template.blog, req.body);
+
+        user.save(function(err, user) {
+          console.info('🆘 👉',err)
+          if (err) {
+            res.json({error: 'save fail'});
+          } else {
+            res.json({result: 'ok'});
           }
         });
-        // console.log(existUser.template.blog);
+
+        console.info(user.template.blog);
       }
-    });
+    );
+
+    // User.update(
+    //   {_id: fixed_user_id},
+    //   {$set:
+    //     {"template.$.blog": req.body}
+    //   }
+    // );
+
+    // var user = User.findById(fixed_user_id, function(err, existUser){
+    //   if (existUser){
+    //     // console.log("user found");
+    //
+    //     console.log(existUser.template);
+    //     debugger
+    //     if (existUser.template === undefined) {
+    //       console.log("in here");
+    //       existUser.template = { blog: req.body };
+    //     }
+    //
+    //       console.log(existUser.template.blog);
+    //
+    //
+    //       // existUser.template = {blog: req.body};
+    //       existUser.save(function(err){
+    //         // console.log("saved");
+    //         if(err){
+    //           console.error(err);
+    //           return next(err);
+    //         }
+    //       });
+    //       // console.log(existUser.template.blog);
+    //     }
+    //   }
+    // });
   });
 
   // make another ajax request from client
@@ -135,7 +263,7 @@ module.exports = function(app) {
   // because /blog is asset
   app.get('/blog-client', function(req, res, next){
     // console.log("in blog");
-    var fixed_user_id = "584df9b62fae324a6eeab438";
+    var fixed_user_id = "585076d7daf33c20b287cf73";
     var user = User.findById(fixed_user_id, function(err, existUser){
       if (existUser){
         if (existUser.template.blog){
@@ -168,3 +296,4 @@ module.exports = function(app) {
   //   });
   // })
 }
+// User.findOne({_id: fixed_user_id},function(err,user){ console.log(">>>>");console.log(user);console.log(">>>>"); });

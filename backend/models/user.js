@@ -14,7 +14,11 @@ var userSchema = new Schema({
   firstName: {type: String, trim: true},
   lastName: {type: String, trim: true},
   password: {type: String},
-  template: blogSchema,
+  // template: blogSchema,
+  template: {
+    blog: {type: Object},
+    freelance: {type: Object}
+  },
 
   twitter: String,
   google: String,
