@@ -10,6 +10,10 @@ var style={
   color: 'white'
 };
 
+var style2 = {
+  fill: 'currentColor'
+};
+
 class Header extends Component{
   constructor(props) {
     super(props);
@@ -36,7 +40,10 @@ class Header extends Component{
           <Link className="nav-link" to="/signout" style={style}>Sign Out</Link>
         </li>,
         <li className="nav-item">
-          <a href="http://localhost:3000/export" target="_parent"><button>Export</button></a>
+          {/* <a href="http://localhost:3000/export" target="_parent"><button>Export</button></a> */}
+          <a href="http://localhost:3000/export" className="f7 no-underline white bg-animate hover-bg-black hover-silver inline-flex items-center pa2 ba border-box mr4">
+            <span className="pl1">Export</span>
+          </a>
         </li>
       ];
     }
