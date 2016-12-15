@@ -9,7 +9,7 @@ class Signout extends Component{
 
   render() {
     return (
-      <div>See you next time!</div>
+      <div>Why you no stay?!</div>
     );
   }
 }

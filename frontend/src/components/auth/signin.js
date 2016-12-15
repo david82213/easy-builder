@@ -52,7 +52,7 @@ class Signin extends Component {
 
         <fieldset className="ba b--transparent ph4 mh0">
           <div className="mt3">
-            <label className="white db fw4 lh-copy f6" for="email">Email</label>
+            <label className="white db fw4 lh-copy f6" htmlFor="email">Email</label>
             {/* <input className="pa2 input-reset ba bg-transparent w-100 measure"
               name="email" type="email" {...email} /> */}
             <input className="w-100 b--white white pa2 input-reset ba bg-transparent hover-bg-black hover-white"
@@ -63,7 +63,7 @@ class Signin extends Component {
 
         <fieldset className="ba b--transparent ph4 mh0">
           <div className="mt3">
-            <label className="white db fw4 lh-copy f6" for="password">Password</label>
+            <label className="white db fw4 lh-copy f6" htmlFor="password">Password</label>
             {/* <input className="pa2 input-reset ba bg-transparent"
               name="password" type="password" {...password} /> */}
             <input className="b--white white pa2 input-reset ba bg-transparent"

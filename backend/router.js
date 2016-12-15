@@ -20,6 +20,10 @@ var Twitter = require("node-twitter-api");
 var secret = require('./config');
 var jwt = require('jwt-simple');
 
+var JSZip = require("jszip");
+var archiver = require('archiver');
+var ejs = require('ejs');
+
 var multer = require('multer');
 // var upload = multer({ dest: './uploads/'});
 var storage = multer.diskStorage({
@@ -130,22 +134,8 @@ module.exports = function(app) {
 
   // routes to serve the static HTML files
   app.get('/templates/blog', function(req, res) {
-      // res.render(html_dir);
-      // res.send('ok');
-
-      // const pathToTemplate = path.join(__dirname, 'templates', 'blog');
-      // res.sendFile(
-      //   'index.html',
-      //   { root: pathToTemplate }
-      // );
-
-      // console.log(User);
-      // const u = new User({firstName: 'dan', lastName: 'dan', email: 'dan2@dan.com', password: '123', template: { blog: 'blogTemplateContents' }});
-      //
-      // u.save(function (user, error) {
-      //   debugger
-      //
-      // })
+    // res.render(html_dir);
+    // res.send('ok');
     // indexHTML = path.join(__dirname, 'templates/blog', 'index.html');
     res.sendFile(path.join( __dirname, 'templates/blog', 'index.html' ));
     // res.render(indexHTML);
@@ -166,7 +156,7 @@ module.exports = function(app) {
   }));
 
   app.get('/blog', function(req, res, next){
-    var fixed_user_id = "585076d7daf33c20b287cf73";
+    var fixed_user_id = "5851b9235539a2cd7e65e72e";
     var user = User.findById(fixed_user_id, function(err, existUser){
        if (existUser){
          if (existUser.template.blog !== void 0) {
@@ -176,7 +166,7 @@ module.exports = function(app) {
              arr_contents[keys[i]] = existUser.template.blog[keys[i]];
            }
         //  var contents5 = existUser.template.blog['contents5'];
-          console.log(arr_contents);
+          // console.log(arr_contents);
         }
        }
 
@@ -212,14 +202,6 @@ module.exports = function(app) {
 
   });
 
-  // app.post('/blog-image', upload.single('avatar'), function (req, res, next) {
-  //   // req.file is the `avatar` file
-  //   // req.body will hold the text fields, if there were any
-  //   console.log(req.body);
-  //   console.log(req.file);
-  //   res.status(204).end();
-  // });
-
   app.post('/blog-image', upload.single('image'), function (req, res, next) {
     // debugger
     console.log('>>>>>>>>>>>>>>>>>>>>>>>>>')
@@ -239,7 +221,7 @@ module.exports = function(app) {
     // console.log(Object.keys(req.body));
     var keys = Object.keys(req.body);
 
-    var fixed_user_id = "585076d7daf33c20b287cf73";
+    var fixed_user_id = "5851b9235539a2cd7e65e72e";
     // var fixed_user_id = "5850801ef08d802aefeb5472";
 
     User.findOne(
@@ -262,40 +244,6 @@ module.exports = function(app) {
         console.info(user.template.blog);
       }
     );
-
-    // User.update(
-    //   {_id: fixed_user_id},
-    //   {$set:
-    //     {"template.$.blog": req.body}
-    //   }
-    // );
-
-    // var user = User.findById(fixed_user_id, function(err, existUser){
-    //   if (existUser){
-    //     // console.log("user found");
-    //
-    //     console.log(existUser.template);
-    //     debugger
-    //     if (existUser.template === undefined) {
-    //       console.log("in here");
-    //       existUser.template = { blog: req.body };
-    //     }
-    //
-    //       console.log(existUser.template.blog);
-    //
-    //
-    //       // existUser.template = {blog: req.body};
-    //       existUser.save(function(err){
-    //         // console.log("saved");
-    //         if(err){
-    //           console.error(err);
-    //           return next(err);
-    //         }
-    //       });
-    //       // console.log(existUser.template.blog);
-    //     }
-    //   }
-    // });
   });
 
   // make another ajax request from client
@@ -303,7 +251,7 @@ module.exports = function(app) {
   // because /blog is asset
   app.get('/blog-client', function(req, res, next){
     // console.log("in blog");
-    var fixed_user_id = "585076d7daf33c20b287cf73";
+    var fixed_user_id = "5851b9235539a2cd7e65e72e";
     var user = User.findById(fixed_user_id, function(err, existUser){
       if (existUser){
         if (existUser.template.blog){
@@ -317,23 +265,85 @@ module.exports = function(app) {
     });
   });
 
-  // app.get('/public/templates', function(req, res, next) {
-  //   res.send(getDirectories(templates_dir));
-  // });
+  function generateArchive(index_ejs, res) {
+    // var output = fs.createWriteStream(__dirname + '/zips/blog.zip');
+    var archive = archiver('zip', {
+        store: true // Sets the compression method to STORE.
+    });
 
-  // app.get('/templates/blog', function(req, res, next){
-  //   res.sendFile(path.join( __dirname, 'templates/blog', 'index.html' ));
-  // });
+    // listen for all archive data to be written
+    // output.on('close', function() {
+    //   console.log(archive.pointer() + ' total bytes');
+    //   console.log('archiver has been finalized and the output file descriptor has closed.');
+    // });
+    //
+    // // good practice to catch this error explicitly
+    archive.on('error', function(err) {
+      throw err;
+    });
+    res.set('Content-Type', 'application/zip');
+    res.set('Content-Disposition', 'attachment; filename=blog.zip');
 
-  // json with href hardcode
-  // app.get('/templates/blog', function(req, res, next){
-  //   res.render('blog/index', {layout: true}, function(err, html){
-  //     var response = {
-  //       template_type: 'Blog',
-  //       template_body_html: html
-  //     };
-  //     res.send(response);
-  //   });
-  // })
+    // pipe archive data to the file
+    archive.pipe(res);
+
+    fullIndexEJS = ""
+    for (var content in index_ejs) {
+      // check also if property is not inherited from prototype
+      fullIndexEJS += index_ejs[content]
+    }
+
+    archive.append(fullIndexEJS, { name: 'templates/blog_export/index.html' })
+    archive.directory('templates/blog_export/');
+    // archive.append(fullIndexEJS, { name: 'templates/blog/index2.ejs' })
+
+    archive.finalize();
+  }
+
+  app.get('/export', function(req, res, next){
+    // var zip = new JSZip();
+
+    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+    var fixed_user_id = "5851b9235539a2cd7e65e72e";
+    User.findById(fixed_user_id, function(err, existUser) {
+       if (existUser){
+         if (existUser.template.blog !== void 0) {
+           var keys = Object.keys(existUser.template.blog);
+           var arr_contents = {};
+           for (var i = 0; i < keys.length; i++) {
+             arr_contents[keys[i]] = existUser.template.blog[keys[i]];
+           }
+        //  var contents5 = existUser.template.blog['contents5'];
+          // console.log(arr_contents);
+          var editedIndexEJS = _.merge({}, blogDefaults, arr_contents);
+          var fileIndex = fs.readFileSync(__dirname + '/templates/blog/index.ejs', 'ascii');
+          var renderIndex = ejs.render(fileIndex, editedIndexEJS);
+
+          // console.log("+++++++++++++++++++++++++++++++++++++++");
+          // console.log(renderIndex);
+          generateArchive(renderIndex, res);
+        }
+      }
+     });
+
+  });
 }
-// User.findOne({_id: fixed_user_id},function(err,user){ console.log(">>>>");console.log(user);console.log(">>>>"); });
+
+// app.get('/public/templates', function(req, res, next) {
+//   res.send(getDirectories(templates_dir));
+// });
+
+// app.get('/templates/blog', function(req, res, next){
+//   res.sendFile(path.join( __dirname, 'templates/blog', 'index.html' ));
+// });
+
+// json with href hardcode
+// app.get('/templates/blog', function(req, res, next){
+//   res.render('blog/index', {layout: true}, function(err, html){
+//     var response = {
+//       template_type: 'Blog',
+//       template_body_html: html
+//     };
+//     res.send(response);
+//   });
+// })

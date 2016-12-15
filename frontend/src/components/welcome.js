@@ -24,9 +24,9 @@ class Welcome extends Component{
     } else{
       return (
         <div>
-        <a className="f6 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" to="/" >Home</a>
-        <a className="f6 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" to="/signin" >Sign In</a>
-        <a className="f6 fw4 hover-white no-underline white-70 dn dib-l pv2 ph3" to="/signup" >Create a account</a>
+        <a className="f6 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="/" >Home</a>
+        <a className="f6 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="/signin" >Sign In</a>
+        <a className="f6 fw4 hover-white no-underline white-70 dn dib-l pv2 ph3" href="/signup" >Create a account</a>
         </div>
       );
     }

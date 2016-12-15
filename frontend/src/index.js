@@ -17,6 +17,8 @@ import Signup from './components/auth/signup';
 import Theme from './components/theme';
 import Welcome from './components/welcome';
 
+import Export from './components/export';
+
 const createStoreWithMiddleware = applyMiddleware(reduxThunk)(createStore);
 // store contains redux state
 const store = createStoreWithMiddleware(reducers);
@@ -37,6 +39,7 @@ ReactDOM.render(
         <Route path="signin" component={Signin} />
         <Route path="signout" component={Signout} />
         <Route path="signup" component={Signup} />
+        <Route path="export" component={Export} />
         <Route path="theme" component={RequireAuth(Theme)} />
       </Route>
     </Router>
